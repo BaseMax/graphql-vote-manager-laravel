@@ -89,6 +89,8 @@ For detailed information about the available API operations, refer to the API do
 
 ## GraphQL Queries and Mutations
 
+## GraphQL Queries and Mutations
+
 | Type     | Name                     | Description                                    | Example                                                                                     |
 |----------|--------------------------|------------------------------------------------|---------------------------------------------------------------------------------------------|
 | Query    | `getUser`                | Retrieve user details based on their ID.       | `getUser(id: 123)`                                                                          |
@@ -114,6 +116,106 @@ For detailed information about the available API operations, refer to the API do
 | Query    | `getAllSurveys`          | Get a list of all available surveys.           | `getAllSurveys`                                                                             |
 | Mutation | `submitSurvey`           | Submit responses for a specific survey.        | `submitSurvey(surveyId: 789, responses: ["Satisfied", "Great suggestions"])`                 |
 | Query    | `getSurveyResponses`     | Get all responses for a specific survey.      | `getSurveyResponses(surveyId: 789)`                                                        |
+| Query    | `getLoggedInUser`        | Get details of the currently logged-in user.  | `getLoggedInUser`                                                                           |
+| Query    | `getPollVotes`           | Get the total number of votes for a poll.      | `getPollVotes(pollId: 456)`                                                                 |
+| Query    | `getSurveyStats`         | Get statistical information about a survey.    | `getSurveyStats(surveyId: 789)`                                                             |
+| Mutation | `resetPollVotes`         | Reset votes for a poll (admin use).            | `resetPollVotes(pollId: 456)`                                                               |
+| Mutation | `resetSurveyResponses`   | Reset survey responses (admin use).            | `resetSurveyResponses(surveyId: 789)`                                                       |
+
+## GraphQL Structure
+
+```graphql
+type User {
+  id: ID!
+  username: String!
+  email: String!
+  polls: [Poll!]!
+  surveys: [Survey!]!
+}
+
+type Poll {
+  id: ID!
+  title: String!
+  description: String
+  options: [PollOption!]!
+  user: User!
+  comments: [Comment!]!
+  votes: [PollVote!]!
+}
+
+type PollOption {
+  id: ID!
+  text: String!
+  poll: Poll!
+  votes: [PollVote!]!
+}
+
+type PollVote {
+  id: ID!
+  user: User!
+  poll: Poll!
+  pollOption: PollOption!
+}
+
+type Comment {
+  id: ID!
+  text: String!
+  user: User!
+  poll: Poll!
+}
+
+type Survey {
+  id: ID!
+  title: String!
+  questions: [String!]!
+  user: User!
+  responses: [SurveyResponse!]!
+}
+
+type SurveyResponse {
+  id: ID!
+  user: User!
+  survey: Survey!
+  answers: [String!]!
+}
+
+type Query {
+  getUser(id: ID!): User
+  getPoll(id: ID!): Poll
+  getAllPolls: [Poll!]!
+  getUserPolls: [Poll!]!
+  getPollComments(pollId: ID!): [Comment!]!
+  getLoggedInUser: User
+  getPollVotes(pollId: ID!): Int!
+  getSurvey(id: ID!): Survey
+  getAllSurveys: [Survey!]!
+  getSurveyResponses(surveyId: ID!): [SurveyResponse!]!
+}
+
+type Mutation {
+  createPoll(title: String!, description: String, options: [String!]!): Poll!
+  updatePoll(id: ID!, title: String, description: String): Poll
+  deletePoll(id: ID!): Boolean
+  voteOnOption(pollId: ID!, optionId: ID!): PollVote
+  createUser(username: String!, email: String!, password: String!): User!
+  loginUser(email: String!, password: String!): String
+  logoutUser: Boolean
+  createComment(pollId: ID!, text: String!): Comment!
+  deleteComment(commentId: ID!): Boolean
+  subscribeToPollUpdates(pollId: ID!): Boolean
+  unsubscribeFromUpdates(pollId: ID!): Boolean
+  createSurvey(title: String!, questions: [String!]!): Survey!
+  updateSurvey(id: ID!, title: String, questions: [String!]!): Survey
+  deleteSurvey(id: ID!): Boolean
+  submitSurvey(surveyId: ID!, answers: [String!]!): SurveyResponse
+  resetPollVotes(pollId: ID!): Boolean
+  resetSurveyResponses(surveyId: ID!): Boolean
+}
+
+type Subscription {
+  pollUpdated(pollId: ID!): Poll
+}
+```
 
 ## Security
 
