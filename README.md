@@ -87,6 +87,34 @@ Once the application is up and running, you can interact with the GraphQL API us
 
 For detailed information about the available API operations, refer to the API documentation.
 
+## GraphQL Queries and Mutations
+
+| Type     | Name                     | Description                                    | Example                                                                                     |
+|----------|--------------------------|------------------------------------------------|---------------------------------------------------------------------------------------------|
+| Query    | `getUser`                | Retrieve user details based on their ID.       | `getUser(id: 123)`                                                                          |
+| Query    | `getPoll`                | Get information about a specific poll.         | `getPoll(id: 456)`                                                                          |
+| Query    | `getAllPolls`            | Get a list of all available polls.             | `getAllPolls`                                                                               |
+| Query    | `getUserPolls`           | Retrieve polls created by the user.            | `getUserPolls`                                                                              |
+| Mutation | `createPoll`             | Create a new poll with options.                | `createPoll(title: "Favorite Color", options: ["Red", "Blue", "Green"])`                    |
+| Mutation | `updatePoll`             | Update poll details and options.               | `updatePoll(id: 456, title: "New Title", options: ["Option A", "Option B"])`                |
+| Mutation | `deletePoll`             | Delete a poll using its ID.                   | `deletePoll(id: 789)`                                                                       |
+| Mutation | `voteOnOption`           | Cast a vote on a specific poll option.         | `voteOnOption(pollId: 456, optionId: 2)`                                                      |
+| Mutation | `createUser`             | Register a new user with credentials.          | `createUser(username: "john_doe", email: "john@example.com", password: "securepassword")`   |
+| Mutation | `loginUser`              | Authenticate a user and get an access token.  | `loginUser(email: "john@example.com", password: "securepassword")`                           |
+| Mutation | `logoutUser`             | Log out the authenticated user.                | `logoutUser`                                                                                |
+| Mutation | `createComment`          | Add a comment to a poll.                       | `createComment(pollId: 456, text: "Great poll!")`                                            |
+| Mutation | `deleteComment`          | Remove a comment from a poll.                  | `deleteComment(commentId: 123)`                                                              |
+| Mutation | `subscribeToPollUpdates` | Subscribe to real-time poll updates.           | `subscribeToPollUpdates(pollId: 456)`                                                        |
+| Mutation | `unsubscribeFromUpdates` | Unsubscribe from real-time poll updates.       | `unsubscribeFromUpdates(pollId: 456)`                                                        |
+| Query    | `getPollComments`        | Get all comments associated with a poll.      | `getPollComments(pollId: 456)`                                                              |
+| Mutation | `createSurvey`           | Create a new survey with questions.            | `createSurvey(title: "Feedback Survey", questions: ["How satisfied are you?", "Suggestions"])` |
+| Mutation | `updateSurvey`           | Update survey details and questions.           | `updateSurvey(id: 789, title: "Updated Survey", questions: ["New Question"])`                |
+| Mutation | `deleteSurvey`           | Delete a survey using its ID.                 | `deleteSurvey(id: 789)`                                                                     |
+| Query    | `getSurvey`              | Get information about a specific survey.       | `getSurvey(id: 789)`                                                                        |
+| Query    | `getAllSurveys`          | Get a list of all available surveys.           | `getAllSurveys`                                                                             |
+| Mutation | `submitSurvey`           | Submit responses for a specific survey.        | `submitSurvey(surveyId: 789, responses: ["Satisfied", "Great suggestions"])`                 |
+| Query    | `getSurveyResponses`     | Get all responses for a specific survey.      | `getSurveyResponses(surveyId: 789)`                                                        |
+
 ## Security
 
 Security is a top priority in this project. User authentication and authorization mechanisms are implemented to ensure that only authorized users can perform certain actions.
