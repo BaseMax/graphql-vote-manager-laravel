@@ -186,7 +186,7 @@ type Query {
   getUserPolls: [Poll!]!
   getPollComments(pollId: ID!): [Comment!]!
   getLoggedInUser: User
-  getPollVotes(pollId: ID!): Int!
+  getPollVotes(pollId: ID!): Int
   getSurvey(id: ID!): Survey
   getAllSurveys: [Survey!]!
   getSurveyResponses(surveyId: ID!): [SurveyResponse!]!
@@ -200,7 +200,7 @@ type Mutation {
   createUser(username: String!, email: String!, password: String!): User!
   loginUser(email: String!, password: String!): String
   logoutUser: Boolean
-  createComment(pollId: ID!, text: String!): Comment!
+  createComment(pollId: ID!, text: String!): Comment
   deleteComment(commentId: ID!): Boolean
   subscribeToPollUpdates(pollId: ID!): Boolean
   unsubscribeFromUpdates(pollId: ID!): Boolean
