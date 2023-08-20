@@ -13,7 +13,6 @@ The Secure Online Voting System is a web application that leverages GraphQL to p
 - User authentication and authorization
 - Create, read, update, and delete polls/surveys
 - Vote on poll options
-- Real-time updates using GraphQL subscriptions
 - Caching with Redis for improved performance
 - Comprehensive API documentation
 
@@ -81,7 +80,7 @@ You can configure various settings in the .env file, including database connecti
 
 ## Usage
 
-Once the application is up and running, you can interact with the GraphQL API using tools like Insomnia or Postman. Refer to the API documentation for details on the available queries, mutations, and subscriptions.
+Once the application is up and running, you can interact with the GraphQL API using tools like Insomnia or Postman. Refer to the API documentation for details on the available queries and mutations.
 
 ## API Documentation
 
