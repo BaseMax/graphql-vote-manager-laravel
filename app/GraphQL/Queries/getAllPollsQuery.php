@@ -22,7 +22,7 @@ class getAllPollsQuery extends Query
 
     public function type(): Type
     {
-        return Type::nonNull(Type::listOf(Type::nonNull(GraphQL::type(('Poll')))));
+        return GraphQL::paginate('Poll');
     }
 
     public function args(): array
@@ -40,7 +40,7 @@ class getAllPollsQuery extends Query
         $with = $fields->getRelations();
 
         return Cache::remember('polls', now()->addMinutes(5), function(){
-            return Poll::all();
+            return Poll::paginate(20);
         });
     }
 

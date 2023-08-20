@@ -22,7 +22,7 @@ class getAllSurveysQuery extends Query
 
     public function type(): Type
     {
-        return Type::nonNull(Type::listOf(Type::nonNull(GraphQL::type('Survey'))));
+        return GraphQL::paginate('Survey');
     }
 
     public function args(): array
@@ -40,7 +40,7 @@ class getAllSurveysQuery extends Query
         $with = $fields->getRelations();
         
         return Cache::remember('surveys', now()->addMinutes(5), function(){
-            return Survey::all();
+            return Survey::paginate(20);
         });
     }
 
