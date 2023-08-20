@@ -106,8 +106,6 @@ For detailed information about the available API operations, refer to the API do
 | Mutation | `logoutUser`             | Log out the authenticated user.                | `logoutUser`                                                                                |
 | Mutation | `createComment`          | Add a comment to a poll.                       | `createComment(pollId: 456, text: "Great poll!")`                                            |
 | Mutation | `deleteComment`          | Remove a comment from a poll.                  | `deleteComment(commentId: 123)`                                                              |
-| Mutation | `subscribeToPollUpdates` | Subscribe to real-time poll updates.           | `subscribeToPollUpdates(pollId: 456)`                                                        |
-| Mutation | `unsubscribeFromUpdates` | Unsubscribe from real-time poll updates.       | `unsubscribeFromUpdates(pollId: 456)`                                                        |
 | Query    | `getPollComments`        | Get all comments associated with a poll.      | `getPollComments(pollId: 456)`                                                              |
 | Mutation | `createSurvey`           | Create a new survey with questions.            | `createSurvey(title: "Feedback Survey", questions: ["How satisfied are you?", "Suggestions"])` |
 | Mutation | `updateSurvey`           | Update survey details and questions.           | `updateSurvey(id: 789, title: "Updated Survey", questions: ["New Question"])`                |
@@ -179,6 +177,20 @@ type SurveyResponse {
   answers: [String!]!
 }
 
+type SurveyAction {
+  id: ID!
+  user: User!
+  survey: Survey!
+  answered: Boolean
+}
+
+type SurveyStatus {
+  seens: Int!
+  notSeens: Int!
+  answereds: Int!
+  didNotAnswereds: Int!
+}
+
 type Query {
   getUser(id: ID!): User
   getPoll(id: ID!): Poll
@@ -190,6 +202,7 @@ type Query {
   getSurvey(id: ID!): Survey
   getAllSurveys: [Survey!]!
   getSurveyResponses(surveyId: ID!): [SurveyResponse!]!
+  getSurveyStatus(surveyId: ID!): SurveyStatus
 }
 
 type Mutation {
@@ -197,13 +210,11 @@ type Mutation {
   updatePoll(id: ID!, title: String, description: String): Poll
   deletePoll(id: ID!): Boolean
   voteOnOption(pollId: ID!, optionId: ID!): PollVote
-  createUser(username: String!, email: String!, password: String!): User!
+  createUser(username: String!, email: String!, password: String!): User
   loginUser(email: String!, password: String!): String
   logoutUser: Boolean
   createComment(pollId: ID!, text: String!): Comment
   deleteComment(commentId: ID!): Boolean
-  subscribeToPollUpdates(pollId: ID!): Boolean
-  unsubscribeFromUpdates(pollId: ID!): Boolean
   createSurvey(title: String!, questions: [String!]!): Survey!
   updateSurvey(id: ID!, title: String, questions: [String!]!): Survey
   deleteSurvey(id: ID!): Boolean
@@ -212,9 +223,6 @@ type Mutation {
   resetSurveyResponses(surveyId: ID!): Boolean
 }
 
-type Subscription {
-  pollUpdated(pollId: ID!): Poll
-}
 ```
 
 ## Security
