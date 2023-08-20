@@ -6,29 +6,29 @@ namespace App\GraphQL\Queries;
 
 use App\Models\Survey;
 use App\Models\SurveyAction;
+use App\Models\User;
 use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
-use Illuminate\Support\Facades\Auth;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Query;
 use Rebing\GraphQL\Support\SelectFields;
 
-class getSurveyQuery extends Query
+class getSurveyStatusQuery extends Query
 {
     protected $attributes = [
-        'name' => 'getSurvey'
+        'name' => 'getSurveyStatus'
     ];
 
     public function type(): Type
     {
-        return GraphQL::type('Survey');
+        return GraphQL::type('SurveyStatus');
     }
 
     public function args(): array
     {
         return [
-            'id' => [
+            'surveyId' => [
                 'type' => Type::nonNull(Type::id())
             ]
         ];
@@ -41,22 +41,19 @@ class getSurveyQuery extends Query
         $select = $fields->getSelect();
         $with = $fields->getRelations();
 
-        $surveys = Survey::where('id', $args['id'])->get();
-        if(count($surveys) > 0){
-            if(SurveyAction::where('user_id', Auth::id())->where('survey_id', $args['id'])->count() == 0){
-                SurveyAction::create([
-                    'user_id' => Auth::id(),
-                    'survey_id' => $args['id'],
-                    'answered' => false
-                ]);
-            }
-            return $surveys[0];
+        if(Survey::where('id', $args['surveyId'])->count() != 0){
+            $seens = SurveyAction::where('survey_id', $args['surveyId'])->count();
+            $notSeens = User::count() - $seens;
+            $answereds = SurveyAction::where('survey_id', $args['surveyId'])->where('answered', true)->count();
+            $didNotAnswereds = $seens - $answereds;
+
+            return (object) [
+                'seens' => $seens,
+                'notSeens' => $notSeens,
+                'answereds' => $answereds,
+                'didNotAnswereds' => $didNotAnswereds
+            ];
         }
         return null;
-    }
-
-    public function authorize($root, array $args, $ctx, ResolveInfo $resolveInfo = null, Closure $getSelectFields = null): bool
-    {
-        return !Auth::guest();
     }
 }

@@ -85,6 +85,7 @@ return [
                 \App\GraphQL\Queries\getSurveyResponsesQuery::class,
                 \App\GraphQL\Queries\getLoggedInUserQuery::class,
                 \App\GraphQL\Queries\getPollVotesQuery::class,
+                \App\GraphQL\Queries\getSurveyStatusQuery::class,
             ],
             'mutation' => [
                 \App\GraphQL\Mutations\createPollMutation::class,
@@ -112,6 +113,8 @@ return [
                 \App\GraphQL\Types\CommentType::class,
                 \App\GraphQL\Types\SurveyType::class,
                 \App\GraphQL\Types\SurveyResponseType::class,
+                \App\GraphQL\Types\SurveyActionType::class,
+                \App\GraphQL\Types\SurveyStatusType::class,
             ],
 
             // Laravel HTTP middleware

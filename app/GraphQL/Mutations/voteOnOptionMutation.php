@@ -46,9 +46,12 @@ class voteOnOptionMutation extends Mutation
 
         $polls = Poll::where('id', $args['pollId'])->get();
         $options = PollOption::where('id', $args['optionId'])->get();
-        if(count($polls) > 0 || count($options) > 0){
+        if(count($polls) > 0 && count($options) > 0){
             $poll = $polls[0];
             $option = $options[0];
+            if($poll->id != $option->poll_id){
+                return null;
+            }
             $exVotes = PollVote::where('user_id', Auth::id())->where('poll_id', $poll->id)->where('poll_option_id', $option->id)->get();
             if(count($exVotes) > 0){
                 return $exVotes[0];

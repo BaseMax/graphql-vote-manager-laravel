@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\GraphQL\Mutations;
 
 use App\Models\Survey;
+use App\Models\SurveyAction;
 use App\Models\SurveyResponse;
 use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -46,10 +47,19 @@ class submitSurveyMutation extends Mutation
         if(Survey::where('id', $args['surveyId'])->count() == 0){
             return null;
         }
+        if(SurveyAction::where('user_id', Auth::id())->where('survey_id', $args['surveyId'])->count() == 0){
+            SurveyAction::create([
+                'user_id' => Auth::id(),
+                'survey_id' => $args['surveyId'],
+                'answered' => true
+            ]);
+        } else {
+            SurveyAction::where('user_id', Auth::id())->where('survey_id', $args['surveyId'])->update(['answered' => true]);
+        }
         return SurveyResponse::create([
             'user_id' => Auth::id(),
             'survey_id' => $args['surveyId'],
-            'answers' => json_encode($args['answers'])
+            'answers' => $args['answers']
         ]);
     }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\GraphQL\Mutations;
 
 use App\Models\Survey;
+use App\Models\SurveyResponse;
 use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
@@ -50,8 +51,8 @@ class updateSurveyMutation extends Mutation
             $survey = $surveys[0];
             if(array_key_exists('title', $args)) $survey->title = $args['title'];
             if(array_key_exists('questions', $args)){
-                $survey->questions = json_encode($args['questions']);
-                $survey->responses->delete();
+                $survey->questions = $args['questions'];
+                SurveyResponse::where('survey_id', $args['id'])->delete();
             }
             $survey->save();
             return $survey;

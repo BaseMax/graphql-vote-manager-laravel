@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\GraphQL\Mutations;
 
 use App\Models\Survey;
+use App\Models\SurveyAction;
+use App\Models\SurveyResponse;
 use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
@@ -40,7 +42,8 @@ class resetSurveyResponsesMutation extends Mutation
 
         $surveys = Survey::where('id', $args['surveyId'])->get();
         if(count($surveys) > 0 && $surveys[0]->user_id == Auth::id()){
-            $surveys[0]->responses->delete();
+            SurveyResponse::where('survey_id', $args['surveyId'])->delete();
+            SurveyAction::where('survey_id', $args['surveyId'])->delete();
             return true;
         }
         return false;

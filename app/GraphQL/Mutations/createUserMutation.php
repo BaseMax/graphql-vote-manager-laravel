@@ -22,7 +22,7 @@ class createUserMutation extends Mutation
 
     public function type(): Type
     {
-        return Type::nonNull(GraphQL::type('User'));
+        return GraphQL::type('User');
     }
 
     public function args(): array
@@ -30,11 +30,9 @@ class createUserMutation extends Mutation
         return [
             'username' => [
                 'type' => Type::nonNull(Type::string()),
-                'rule' => ['unique:users']
             ],
             'email' => [
                 'type' => Type::nonNull(Type::string()),
-                'rule' => ['unique:users']
             ],
             'password' => [
                 'type' => Type::nonNull(Type::string())
@@ -48,10 +46,13 @@ class createUserMutation extends Mutation
         $select = $fields->getSelect();
         $with = $fields->getRelations();
 
-        return User::create([
-            'username' => $args['username'],
-            'email' => $args['email'],
-            'password' => Hash::make($args['password']),
-        ]);
+        if(User::where('email', $args['email'])->orWhere('username', $args['username'])->count() == 0){
+            return User::create([
+                'username' => $args['username'],
+                'email' => $args['email'],
+                'password' => Hash::make($args['password']),
+            ]);
+        }
+        return null;
     }
 }

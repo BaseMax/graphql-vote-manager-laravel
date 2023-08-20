@@ -27,7 +27,7 @@ class createSurveyMutation extends Mutation
     public function args(): array
     {
         return [
-            'titel' => [
+            'title' => [
                 'type' => Type::nonNull(Type::string())
             ],
             'questions' => [
@@ -44,7 +44,7 @@ class createSurveyMutation extends Mutation
 
         return Survey::create([
             'title' => $args['title'],
-            'questions' => json_encode($args['questions']),
+            'questions' => $args['questions'],
             'user_id' => Auth::id()
         ]);
     }

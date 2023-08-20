@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\GraphQL\Mutations;
 
 use App\Models\Poll;
+use App\Models\PollVote;
 use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
@@ -40,7 +41,7 @@ class resetPollVotesMutation extends Mutation
 
         $polls = Poll::where('id', $args['pollId'])->get();
         if(count($polls) > 0 && $polls[0]->user_id == Auth::id()){
-            $polls[0]->votes->delete;
+            PollVote::where('poll_id', $args['pollId'])->delete();
             return true;
         }
         return false;
