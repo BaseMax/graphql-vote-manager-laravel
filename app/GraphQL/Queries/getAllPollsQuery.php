@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Query;
 use Rebing\GraphQL\Support\SelectFields;
+use Illuminate\Support\Facades\Cache;
 
 class getAllPollsQuery extends Query
 {
@@ -38,7 +39,9 @@ class getAllPollsQuery extends Query
         $select = $fields->getSelect();
         $with = $fields->getRelations();
 
-        return Poll::all();
+        return Cache::remember('polls', now()->addMinutes(5), function(){
+            return Poll::all();
+        });
     }
 
     public function authorize($root, array $args, $ctx, ResolveInfo $resolveInfo = null, Closure $getSelectFields = null): bool

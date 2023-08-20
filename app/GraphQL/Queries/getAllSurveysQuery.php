@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Rebing\GraphQL\Support\Query;
 use Rebing\GraphQL\Support\SelectFields;
 use Rebing\GraphQL\Support\Facades\GraphQL;
+use Illuminate\Support\Facades\Cache;
 
 class getAllSurveysQuery extends Query
 {
@@ -37,8 +38,10 @@ class getAllSurveysQuery extends Query
         $fields = $getSelectFields();
         $select = $fields->getSelect();
         $with = $fields->getRelations();
-
-        return Survey::all();
+        
+        return Cache::remember('surveys', now()->addMinutes(5), function(){
+            return Survey::all();
+        });
     }
 
     public function authorize($root, array $args, $ctx, ResolveInfo $resolveInfo = null, Closure $getSelectFields = null): bool
