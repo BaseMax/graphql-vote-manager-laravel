@@ -88,8 +88,6 @@ For detailed information about the available API operations, refer to the API do
 
 ## GraphQL Queries and Mutations
 
-## GraphQL Queries and Mutations
-
 | Type     | Name                     | Description                                    | Example                                                                                     |
 |----------|--------------------------|------------------------------------------------|---------------------------------------------------------------------------------------------|
 | Query    | `getUser`                | Retrieve user details based on their ID.       | `getUser(id: 123)`                                                                          |
